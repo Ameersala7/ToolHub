@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Image Formats Converter</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1f1f1f;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    label, select, input, button {
+      display: block;
+      margin: 1rem 0;
+      width: 100%;
+    }
+    input, select, button {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #6200ee;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3700b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Image Format Converter</h1>
+    <input type="file" id="inputFile" multiple />
+
+    <label for="outputFormat">Convert To:</label>
+    <select id="outputFormat">
+      <optgroup label="Raster Formats">
+        <option value="jpg">JPG</option>
+        <option value="png">PNG</option>
+        <option value="gif">GIF</option>
+        <option value="bmp">BMP</option>
+        <option value="tiff">TIFF</option>
+        <option value="webp">WEBP</option>
+        <option value="pgm">PGM</option>
+        <option value="pbm">PBM</option>
+        <option value="pnm">PNM</option>
+        <option value="pam">PAM</option>
+      </optgroup>
+      <optgroup label="Vector Formats">
+        <option value="svg">SVG</option>
+        <option value="pdf">PDF</option>
+        <option value="eps">EPS</option>
+        <option value="ai">AI</option>
+        <option value="emf">EMF</option>
+        <option value="wmf">WMF</option>
+      </optgroup>
+    </select>
+
+    <button onclick="handleConvert()">Convert</button>
+    <button onclick="downloadAll()">Download All Converted Files</button>
+    <div id="status"></div>
+  </div>
+
+  <script>
+async function handleConvert() {
+  const file = document.getElementById('inputFile').files[0];
+  const outputFormat = document.getElementById('outputFormat').value;
+  const status = document.getElementById('status');
+  status.innerText = "";
+
+  if (!file) {
+    status.innerText = "Please upload a file.";
+    return;
+  }
+
+  const formData = new FormData();
+  const files = document.getElementById('inputFile').files;
+  for (let f of files) {
+    formData.append('files', f);
+  }
+  formData.append('outputFormat', outputFormat);
+
+  status.innerText = "Uploading and converting...";
+
+  try {
+    const res = await fetch('/convert', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      throw new Error(error);
+    }
+
+    const blob = await res.blob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'converted.' + outputFormat;
+    link.textContent = 'Download ' + link.download;
+    link.style.display = 'block';
+    document.body.appendChild(link);
+    status.innerText = "Conversion complete.";
+  } catch (error) {
+    status.innerText = "Error: " + error.message;
+  }
+}
+
+function downloadAll() {
+  fetch('/download-all')
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to fetch zip.");
+      return response.blob();
+    })
+    .then(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'converted_files.zip';
+      link.click();
+    })
+    .catch(err => {
+      alert("Error downloading: " + err.message);
+    });
+}
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JPG to PNG Converter</title>
+    <link rel="stylesheet" href="../../../styles/style.css">
+</head>
+<body>
+    <header><h1>JPG to PNG Converter</h1></header>
+    <main>
+        <input type="file" id="imgInput" accept="image/jpeg" multiple><br><br>
+        <div id="output"></div>
+    </main>
+    <script>
+        document.getElementById('imgInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        canvas.getContext('2d').drawImage(img, 0, 0);
+                        canvas.toBlob(function(blob) {
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = file.name.replace('.jpg', '.png');
+                            link.textContent = 'Download ' + link.download;
+                            link.style.display = 'block';
+                            link.style.color = '#90caf9';
+                            outputDiv.appendChild(link);
+                        }, 'image/png');
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Barcode Generator</title>
+  <link rel="stylesheet" href="../../../styles/style.css">
+  <style>
+    body { font-family: Arial, padding: 20px; }
+    textarea { width: 100%; height: 150px; font-size: 16px; }
+    select, button { font-size: 16px; padding: 5px 10px; margin-top: 10px; }
+    .output-block { margin-bottom: 40px; }
+    svg, canvas { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <header><h1>Barcode Generator</h1></header>
+  <p>Gib einen Code pro Zeile ein:</p>
+  <textarea id="inputList" placeholder="1234567890\n9876543210"></textarea><br>
+
+  <label for="type">Code-Typ:</label>
+  <select id="type">
+    <option value="CODE128">Code 128</option>
+    <option value="CODE39">Code 39</option>
+    <option value="EAN13">EAN-13</option>
+    <option value="EAN8">EAN-8</option>
+    <option value="UPC">UPC</option>
+    <option value="ITF">ITF</option>
+    <option value="MSI">MSI</option>
+    <option value="Pharmacode">Pharmacode</option>
+    <option value="QR">QR-Code</option>
+  </select>
+  <button onclick="generateCodes()">Generieren</button>
+
+  <div id="outputArea"></div>
+
+  <script src="JsBarcode.all.js"></script>
+  <script src="QRBarcode.js"></script>
+
+  <script>
+    function generateCodes() {
+      const input = document.getElementById("inputList").value.trim();
+      const type = document.getElementById("type").value;
+      const lines = input.split(/\r?\n/);
+      const container = document.getElementById("outputArea");
+      container.innerHTML = "";
+
+      lines.forEach(code => {
+        const value = code.trim();
+        if (value === "") return;
+
+        const block = document.createElement("div");
+        block.className = "output-block";
+
+        const label = document.createElement("div");
+        label.textContent = value + " (" + type + ")";
+        block.appendChild(label);
+
+        if (type === "QR") {
+          const qr = new QRious({ value: value, size: 120 });
+          const canvas = document.createElement("canvas");
+          canvas.width = qr.size;
+          canvas.height = qr.size;
+          canvas.getContext("2d").drawImage(qr.image, 0, 0);
+          block.appendChild(canvas);
+        } else {
+          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          try {
+            JsBarcode(svg, value, {
+              format: type,
+              displayValue: true,
+              fontSize: 18,
+              height: 80
+            });
+            block.appendChild(svg);
+          } catch (e) {
+            block.appendChild(document.createTextNode("Fehler: " + e.message));
+          }
+        }
+
+        container.appendChild(block);
+      });
+    }
+  </script>
+</body>
+</html>

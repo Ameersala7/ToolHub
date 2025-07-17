@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ToolHub - All-in-One Tools</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #121212;
+      color: white;
+    }
+    header {
+      background: #1f1f1f;
+      padding: 10px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 10px;
+      position: relative;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown > span {
+      cursor: pointer;
+      padding: 8px 12px;
+      display: inline-block;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #1f1f1f;
+      border: 1px solid #333;
+      top: 100%;
+      left: 0;
+      min-width: 200px;
+      z-index: 10;
+      text-align: left;
+    }
+    .dropdown-content a {
+      color: #90caf9;
+      padding: 10px;
+      display: block;
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background-color: #333;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    main {
+      height: calc(100vh - 110px);
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: #1f1f1f;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ToolHub</h1>
+    <nav>
+
+      <div class="dropdown">
+        <span>Barcode</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/Barcode/Code 128/index.html')">Code 128</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <span>Converters</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/converter/image-formats-app/index.html')">🖼️ Image Formats App</a>
+        </div>
+      </div>
+
+
+      <div class="dropdown">
+        <span>PDF Tools</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/pdf/pdf-to-word/index.html')">PDF to Word</a>
+          <a href="#" onclick="loadTool('tools/pdf/word-to-pdf/index.html')">Word to PDF</a>
+          <a href="#" onclick="loadTool('tools/pdf/merge-pdf/index.html')">Merge PDF</a>
+          <a href="#" onclick="loadTool('tools/pdf/split-pdf/index.html')">Split PDF</a>
+          <a href="#" onclick="loadTool('tools/pdf/compress-pdf/index.html')">Compress PDF</a>
+          <a href="#" onclick="loadTool('tools/pdf/pdf-to-jpg/index.html')">PDF to JPG</a>
+          <a href="#" onclick="loadTool('tools/pdf/pdf-editor/index.html')">PDF Editor</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span>Image Tools</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/image/image-compressor/index.html')">Image Compressor</a>
+          <a href="#" onclick=http://localhost:5000>JPG to PNG</a>
+          <a href="#" onclick="loadTool('tools/image/png-to-jpg/index.html')">PNG to JPG</a>
+          <a href="#" onclick="loadTool('tools/image/webp-converter/index.html')">WebP Converter</a>
+          <a href="#" onclick="loadTool('tools/image/resize-image/index.html')">Resize Image</a>
+          <a href="#" onclick="loadTool('tools/image/image-to-pdf/index.html')">Image to PDF</a>
+          <a href="#" onclick="loadTool('tools/image/background-remover/index.html')">Background Remover</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span>Media Tools</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/media/youtube-to-mp3/index.html')">YouTube to MP3</a>
+          <a href="#" onclick="loadTool('tools/media/youtube-to-mp4/index.html')">YouTube to MP4</a>
+          <a href="#" onclick="loadTool('tools/media/mp4-to-mp3/index.html')">MP4 to MP3</a>
+          <a href="#" onclick="loadTool('tools/media/audio-converter/index.html')">Audio Converter</a>
+          <a href="#" onclick="loadTool('tools/media/video-compressor/index.html')">Video Compressor</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span>Dev Tools</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/dev/json-formatter/index.html')">JSON Formatter</a>
+          <a href="#" onclick="loadTool('tools/dev/csv-to-json/index.html')">CSV to JSON</a>
+          <a href="#" onclick="loadTool('tools/dev/json-to-csv/index.html')">JSON to CSV</a>
+          <a href="#" onclick="loadTool('tools/dev/html-css-minifier/index.html')">HTML/CSS Minifier</a>
+          <a href="#" onclick="loadTool('tools/dev/base64-encoder/index.html')">Base64 Encoder</a>
+          <a href="#" onclick="loadTool('tools/dev/base64-decoder/index.html')">Base64 Decoder</a>
+          <a href="#" onclick="loadTool('tools/dev/regex-tester/index.html')">Regex Tester</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span>AI Tools</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/ai/ai-writer/index.html')">AI Writer</a>
+          <a href="#" onclick="loadTool('tools/ai/essay-generator/index.html')">Essay Generator</a>
+          <a href="#" onclick="loadTool('tools/ai/grammar-checker/index.html')">Grammar Checker</a>
+          <a href="#" onclick="loadTool('tools/ai/text-summarizer/index.html')">Text Summarizer</a>
+          <a href="#" onclick="loadTool('tools/ai/resume-builder/index.html')">Resume Builder</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span>Calculators</span>
+        <div class="dropdown-content">
+          <a href="#" onclick="loadTool('tools/calc/loan-calculator/index.html')">Loan Calculator</a>
+          <a href="#" onclick="loadTool('tools/calc/tax-calculator/index.html')">Tax Calculator</a>
+          <a href="#" onclick="loadTool('tools/calc/currency-converter/index.html')">Currency Converter</a>
+          <a href="#" onclick="loadTool('tools/calc/unit-converter/index.html')">Unit Converter</a>
+          <a href="#" onclick="loadTool('tools/calc/timezone-converter/index.html')">Timezone Converter</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <iframe id="toolFrame" src=""></iframe>
+  </main>
+
+  <footer>
+    <p>ToolHub © 2025</p>
+  </footer>
+
+  <script>
+    function loadTool(url) {
+      document.getElementById('toolFrame').src = url;
+    }
+  </script>
+</body>
+</html>

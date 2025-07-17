@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Compressor</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <header><h1>Image Compressor</h1></header>
+    <main>
+        <input type="file" id="imageInput" accept="image/*" multiple><br><br>
+        <button id="downloadAllBtn" style="display:none;">Download All Compressed Images</button>
+        <div id="output"></div>
+    </main>
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const outputDiv = document.getElementById('output');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const compressedBlobs = [];
+
+        imageInput.addEventListener('change', function(e) {
+            outputDiv.innerHTML = '';
+            compressedBlobs.length = 0;
+            const files = Array.from(e.target.files);
+
+            let processedCount = 0;
+
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        canvas.toBlob(function(blob) {
+                            const link = document.createElement('a');
+                            const fileName = 'compressed_' + file.name;
+                            link.href = URL.createObjectURL(blob);
+                            link.download = fileName;
+                            link.textContent = 'Download ' + fileName;
+                            link.style.display = 'block';
+                            link.style.color = '#90caf9';
+                            outputDiv.appendChild(link);
+
+                            compressedBlobs.push({ name: fileName, blob: blob });
+                            processedCount++;
+
+                            if (processedCount === files.length) {
+                                downloadAllBtn.style.display = 'inline';
+                            }
+                        }, 'image/jpeg', 0.6);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        downloadAllBtn.addEventListener('click', () => {
+            const zip = new JSZip();
+            compressedBlobs.forEach(file => {
+                zip.file(file.name, file.blob);
+            });
+            zip.generateAsync({ type: 'blob' }).then(function(content) {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(content);
+                a.download = 'compressed_images.zip';
+                a.click();
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</body>
+</html>
