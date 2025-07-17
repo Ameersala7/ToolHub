@@ -1,0 +1,37 @@
+
+body {
+    background-color: #121212;
+    color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+header, footer {
+    background-color: #1e1e1e;
+    padding: 1em;
+    text-align: center;
+}
+nav a {
+    color: #90caf9;
+    margin: 0 1em;
+    text-decoration: none;
+}
+.hero {
+    text-align: center;
+    padding: 2em;
+}
+.tools-preview {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    padding: 2em;
+}
+.tools-preview div {
+    background-color: #2c2c2c;
+    padding: 1em;
+    border-radius: 8px;
+}
+.tools-preview div a {
+    color: #fff;
+    text-decoration: none;
+}
